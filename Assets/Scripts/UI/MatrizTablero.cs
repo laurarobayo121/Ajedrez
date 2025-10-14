@@ -47,6 +47,13 @@ public class MatrizTablero : MonoBehaviour
                 // Ajuste de tamaño de cada casilla según el fondo real del tablero
                 casilla.transform.localScale = new Vector3(anchoCasilla, altoCasilla, 1f);
 
+                CasillaInfo info = casilla.AddComponent<CasillaInfo>();
+                info.fila = fila;
+                info.columna = col;
+                info.notacion = LenguajeAjedrez.ANotacion(fila, col, filas);
+
+                casilla.name = $"Casilla_{info.notacion}";
+
                 casillas[fila, col] = casilla;
             }
         }

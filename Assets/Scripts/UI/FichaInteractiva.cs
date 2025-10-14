@@ -7,15 +7,31 @@ public class FichaInteractiva : MonoBehaviour
     private Camera camaraPrincipal;
     private Vector3 posicionInicial;
 
+    private Entrada moduloEntrada;
+    public GestorTurnos gestorTurnos;
+
     void Start()
     {
         camaraPrincipal = Camera.main;
+        moduloEntrada = FindObjectOfType<Entrada>();
+        gestorTurnos = FindObjectOfType<GestorTurnos>();
+
+        
     }
 
     void OnMouseDown()
     {
+        // Verifica si la entrada está habilitada antes de permitir movimiento
+        if (moduloEntrada == null || !moduloEntrada.EstaHabilitada())
+        {
+            Debug.Log("No es el turno del jugador humano.");
+            return;
+        }
+        
         IsDrag = true;
         posicionInicial = transform.position;
+        moduloEntrada.RegistrarSeleccion(gameObject);
+        
 
         // Diferencia entre el punto del mouse y el centro de la ficha
         Vector3 mouseWorld = camaraPrincipal.ScreenToWorldPoint(Input.mousePosition);
@@ -36,6 +52,7 @@ public class FichaInteractiva : MonoBehaviour
     void OnMouseUp()
     {
         IsDrag = false;
+        moduloEntrada.RegistrarMovimiento(transform.position);
 
         // Búsqueda de la casilla más cercana al soltar
         GameObject casillaCercana = EncontrarCasillaMasCercana();
@@ -48,6 +65,9 @@ public class FichaInteractiva : MonoBehaviour
             // Si no hay casilla cercana, vuelve al punto inicial
             transform.position = posicionInicial;
         }
+
+        if (gestorTurnos != null)
+        gestorTurnos.JugadaHumanoCompletada();
     }
 
     GameObject EncontrarCasillaMasCercana()
@@ -69,4 +89,5 @@ public class FichaInteractiva : MonoBehaviour
 
         return masCercana;
     }
+
 }
