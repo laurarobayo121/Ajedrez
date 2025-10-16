@@ -242,17 +242,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tablero: {fileID: 2103043485}
   contenedorFichas: {fileID: 289383040}
-  torreBlanca: {fileID: 429262698632078929, guid: b590e54d65c2b11459736a840d5cc3bb, type: 3}
-  caballoBlanco: {fileID: 429262698632078929, guid: b590e54d65c2b11459736a840d5cc3bb, type: 3}
-  alfilBlanco: {fileID: 429262698632078929, guid: b590e54d65c2b11459736a840d5cc3bb, type: 3}
-  reinaBlanca: {fileID: 429262698632078929, guid: b590e54d65c2b11459736a840d5cc3bb, type: 3}
-  reyBlanco: {fileID: 429262698632078929, guid: b590e54d65c2b11459736a840d5cc3bb, type: 3}
+  torreBlanca: {fileID: 2357549319826169413, guid: 991c3e724942845759c17efdb68262d3, type: 3}
+  caballoBlanco: {fileID: 2171197618812055229, guid: f7f3c2d4f888944d4a79e1e01d1db532, type: 3}
+  alfilBlanco: {fileID: 8205767977283016397, guid: 3491a3b8f103f413f95b4121058a64d9, type: 3}
+  reinaBlanca: {fileID: 1747379277332236110, guid: 2538545205c4641a0867cd908c318d10, type: 3}
+  reyBlanco: {fileID: 2504793867285779901, guid: 3be616eccf64b46a7a37cd5e9e4c2926, type: 3}
   peonBlanco: {fileID: 429262698632078929, guid: b590e54d65c2b11459736a840d5cc3bb, type: 3}
-  torreNegra: {fileID: 7697819383800486998, guid: 1f69a1be606db3a43a9be4c5c27d4ece, type: 3}
-  caballoNegro: {fileID: 7697819383800486998, guid: 1f69a1be606db3a43a9be4c5c27d4ece, type: 3}
-  alfilNegro: {fileID: 7697819383800486998, guid: 1f69a1be606db3a43a9be4c5c27d4ece, type: 3}
-  reinaNegra: {fileID: 7697819383800486998, guid: 1f69a1be606db3a43a9be4c5c27d4ece, type: 3}
-  reyNegro: {fileID: 7697819383800486998, guid: 1f69a1be606db3a43a9be4c5c27d4ece, type: 3}
+  torreNegra: {fileID: 8134279243036187251, guid: 08e29e97689214080abc3eb8387ef19f, type: 3}
+  caballoNegro: {fileID: 7049505072773011647, guid: c3074c873b5f141e88ab2199b404933f, type: 3}
+  alfilNegro: {fileID: 5831335831390219248, guid: 6212f64a08ca541868c04d40785dd911, type: 3}
+  reinaNegra: {fileID: 107303612042520894, guid: 174454f826d5542798d0cb1693dee29a, type: 3}
+  reyNegro: {fileID: 7899061255406175044, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
   peonNegro: {fileID: 7697819383800486998, guid: 1f69a1be606db3a43a9be4c5c27d4ece, type: 3}
 --- !u!4 &252187867
 Transform:
@@ -1342,6 +1342,63 @@ Transform:
   - {fileID: 289383040}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2044703198484547480
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 532766693373378888, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 532766693373378888, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 532766693373378888, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 532766693373378888, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 532766693373378888, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 532766693373378888, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 532766693373378888, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 532766693373378888, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 532766693373378888, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 532766693373378888, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7899061255406175044, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
+      propertyPath: m_Name
+      value: FichasNegras
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cdda0b5d5b7de45b2a5cedf5b078a567, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1353,3 +1410,4 @@ SceneRoots:
   - {fileID: 1425264679}
   - {fileID: 804553798}
   - {fileID: 1984279041}
+  - {fileID: 2044703198484547480}
