@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      AlfilBlanco_0: -1455788484034158887
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

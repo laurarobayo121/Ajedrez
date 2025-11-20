@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      PeonBlanco_0: -8776258356141286216
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      PeonNegro_0: -6147385484080480048
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ReyNegro_0: 4010696339370049163
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
