@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FichasBlancas Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4199074518993898992, guid: b590e54d65c2b11459736a840d5cc3bb, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 7021466236706122514, guid: b590e54d65c2b11459736a840d5cc3bb, type: 3}
       propertyPath: tipoPieza
       value: 1

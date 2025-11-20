@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2396233592214903323, guid: 174454f826d5542798d0cb1693dee29a, type: 3}
       propertyPath: tipoPieza
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7748133309075319602, guid: 174454f826d5542798d0cb1693dee29a, type: 3}
       propertyPath: m_LocalPosition.x

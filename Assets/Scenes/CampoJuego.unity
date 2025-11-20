@@ -244,16 +244,16 @@ MonoBehaviour:
   contenedorFichas: {fileID: 289383040}
   torreBlanca: {fileID: 2357549319826169413, guid: 991c3e724942845759c17efdb68262d3, type: 3}
   caballoBlanco: {fileID: 2171197618812055229, guid: f7f3c2d4f888944d4a79e1e01d1db532, type: 3}
-  alfilBlanco: {fileID: 8205767977283016397, guid: 3491a3b8f103f413f95b4121058a64d9, type: 3}
+  alfilBlanco: {fileID: 5738490710105674313, guid: 00ad8390795659a439f3ba7a205d4b17, type: 3}
   reinaBlanca: {fileID: 1747379277332236110, guid: 2538545205c4641a0867cd908c318d10, type: 3}
-  reyBlanco: {fileID: 2504793867285779901, guid: 3be616eccf64b46a7a37cd5e9e4c2926, type: 3}
-  peonBlanco: {fileID: 429262698632078929, guid: b590e54d65c2b11459736a840d5cc3bb, type: 3}
+  reyBlanco: {fileID: 870843867688349377, guid: 751723cad5d69b14bb173fb18a36a412, type: 3}
+  peonBlanco: {fileID: 8579834935555218286, guid: 7564eb1c954ba1b469a953e08b19e182, type: 3}
   torreNegra: {fileID: 8134279243036187251, guid: 08e29e97689214080abc3eb8387ef19f, type: 3}
   caballoNegro: {fileID: 7049505072773011647, guid: c3074c873b5f141e88ab2199b404933f, type: 3}
-  alfilNegro: {fileID: 5831335831390219248, guid: 6212f64a08ca541868c04d40785dd911, type: 3}
+  alfilNegro: {fileID: 527259077266905840, guid: e42a4b722c29d9948b1eb3a212b66472, type: 3}
   reinaNegra: {fileID: 107303612042520894, guid: 174454f826d5542798d0cb1693dee29a, type: 3}
-  reyNegro: {fileID: 2504796646119269289, guid: cf37bc0fc5f66487099b396b877de858, type: 3}
-  peonNegro: {fileID: 7697819383800486998, guid: 1f69a1be606db3a43a9be4c5c27d4ece, type: 3}
+  reyNegro: {fileID: 1977328169286370575, guid: 45850193d02f1724a9a3ba555ae8c5ec, type: 3}
+  peonNegro: {fileID: 1804374883965891830, guid: 86cb9ffdc1ed51b4b997bd2c594f20d8, type: 3}
 --- !u!4 &252187867
 Transform:
   m_ObjectHideFlags: 0
@@ -455,12 +455,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -6198720407037316706, guid: ef2e82ec263711243a3276a0f50a94af, type: 3}
+  m_Sprite: {fileID: -9164900534439875214, guid: 4a2ecad1e3f31df4ab7ea94b57848a90, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 7.17, y: 7.17}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -474,13 +474,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 493072994}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.39, y: 1.39, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.9756903, y: 0.9756903, z: 0.7019354}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2103043486}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
