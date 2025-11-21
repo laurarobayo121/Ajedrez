@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      DamaNegra_0: -6827395834573049021
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

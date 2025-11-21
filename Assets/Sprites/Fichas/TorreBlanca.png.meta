@@ -172,7 +172,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      TorreBlanca_0: 834546443023457419
+      TorreBlanca_1: -234985398220629203
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

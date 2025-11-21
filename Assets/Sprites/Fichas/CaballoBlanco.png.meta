@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CaballoBlanco_0: 1894686602548798387
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
