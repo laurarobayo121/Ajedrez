@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 5be07c2e47c7c854a83d24b2d06b007a
+guid: 71e05ae0403c07e418a75c93b44b901a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4569554774515769712
-    second: Pasaje2_0
+      213: 5966035490650194657
+    second: imagen_2025-11-20_194306375_0
+  - first:
+      213: -5035779866592213562
+    second: imagen_2025-11-20_194306375_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +49,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -113,13 +116,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Pasaje2_0
+      name: imagen_2025-11-20_194306375_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 735
-        height: 412
+        width: 619
+        height: 980
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +131,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 071e3bc5bd15a6f30800000000000000
-      internalID: 4569554774515769712
+      spriteID: 1e204995bad9bc250800000000000000
+      internalID: 5966035490650194657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: imagen_2025-11-20_194306375_1
+      rect:
+        serializedVersion: 2
+        x: 671
+        y: 125
+        width: 311
+        height: 732
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c505bc54e05d1ab0800000000000000
+      internalID: -5035779866592213562
       vertices: []
       indices: 
       edges: []
@@ -138,7 +163,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +173,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Pasaje2_0: 4569554774515769712
+      imagen_2025-11-20_194306375_0: 5966035490650194657
+      imagen_2025-11-20_194306375_1: -5035779866592213562
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
