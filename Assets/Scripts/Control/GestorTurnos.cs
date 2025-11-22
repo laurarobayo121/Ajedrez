@@ -18,6 +18,12 @@ public class GestorTurnos : MonoBehaviour
     public Entrada motorEntrada; // tu clase que controla al jugador
     public Inferencia motorIA;        // el script de la IA
 
+    [Header("Sonidos")]
+    public AudioSource audioSource;
+    public AudioClip sonidoHumano;
+    public AudioClip sonidoIA;
+
+
     void Start()
     {
         IniciarPartida();
@@ -59,6 +65,7 @@ public class GestorTurnos : MonoBehaviour
     private void IniciarTemporizadorHumano()
     { 
         Debug.Log("🟢 Turno del humano iniciado. Temporizador activado.");
+        ReproducirSonidoHumano();
         tiempoRestante = tiempoPorTurno;
         temporizadorActivo = true;
         motorEntrada.HabilitarEntrada(true);
@@ -67,6 +74,7 @@ public class GestorTurnos : MonoBehaviour
     private void IniciarTemporizadorIA()
     {
         Debug.Log("🤖 Temporizador de la IA reiniciado (aunque no cuente regresivamente).");
+        ReproducirSonidoIA();
         ReiniciarTemporizador(); // Deja el tiempo en 10 siempre
     }
 
@@ -109,5 +117,18 @@ public class GestorTurnos : MonoBehaviour
         turnoActual = Turno.Humano;
         IniciarTemporizadorHumano();
     }
+
+    private void ReproducirSonidoHumano()
+    {
+        if (audioSource != null && sonidoHumano != null)
+            audioSource.PlayOneShot(sonidoHumano);
+    }
+
+    private void ReproducirSonidoIA()
+    {
+        if (audioSource != null && sonidoIA != null)
+            audioSource.PlayOneShot(sonidoIA);
+    }
+
 
 }
