@@ -10,7 +10,7 @@ public class Inferencia : MonoBehaviour
         Debug.Log("IA pensando su jugada...");
 
         // Simula un tiempo de "pensamiento" antes de mover
-        Invoke(nameof(SimularMovimiento), 1.5f);
+        Invoke(nameof(SimularMovimiento), 5f);
     }
 
     private void SimularMovimiento()
