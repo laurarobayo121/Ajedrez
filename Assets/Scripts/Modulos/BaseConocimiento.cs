@@ -14,7 +14,6 @@ public class BaseConocimiento : MonoBehaviour
 
     public bool VerificarMovimientoLegal(Movimiento movimiento)
     {
-        // Obtener el script PiezaAjedrez de la ficha movida
         PiezaAjedrez pieza = movimiento.ficha.GetComponent<PiezaAjedrez>();
         if (pieza == null)
         {
@@ -22,17 +21,33 @@ public class BaseConocimiento : MonoBehaviour
             return false;
         }
 
-        // Verificar si el movimiento está en la lista de movimientos legales de la pieza
+        // Verificar si el movimiento es legal
         bool movimientoLegal = pieza.EsMovimientoLegal(movimiento.destino);
 
         if (movimientoLegal)
         {
             Debug.Log($"Movimiento LEGAL de {pieza.tipoPieza} {pieza.colorPieza} desde {movimiento.inicio} hasta {movimiento.destino}");
-            
-            // Actualizar la posición de la pieza
+
+            // --- 🔥 DETECCIÓN DE CAPTURA ANTES DE MOVER ---
+            if (HayPiezaEnPosicion(movimiento.destino))
+            {
+                GameObject piezaCapturadaObj = ObtenerPiezaEnPosicion(movimiento.destino);
+                PiezaAjedrez piezaCapturada = piezaCapturadaObj.GetComponent<PiezaAjedrez>();
+
+                // Notificar captura al gestor de partida
+                GestorPartida gestor = FindObjectOfType<GestorPartida>();
+                if (gestor != null)
+                    gestor.NotificarCaptura(piezaCapturada);
+
+                // Destruir la pieza capturada
+                Destroy(piezaCapturadaObj);
+            }
+            // -----------------------------------------------------
+
+            // Mover la pieza
             pieza.ActualizarPosicion(movimiento.destino);
-            
-            // Actualizar el registro de piezas
+
+            // Actualizar el registro del tablero
             ActualizarRegistroPiezas();
         }
         else
@@ -42,6 +57,7 @@ public class BaseConocimiento : MonoBehaviour
 
         return movimientoLegal;
     }
+
 
     private void ActualizarRegistroPiezas()
     {

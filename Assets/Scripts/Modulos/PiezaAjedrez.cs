@@ -14,6 +14,10 @@ public class PiezaAjedrez : MonoBehaviour
     private Entrada moduloEntrada;
     private BaseConocimiento baseConocimiento;
 
+    [Header("Atributos Especiales")]
+    public bool esRey = false;   // Marca esto en el inspector solo para el rey
+    public bool esIA = false;    // Marca TRUE si esta pieza pertenece a la IA
+
     void Start()
     {
         moduloEntrada = FindObjectOfType<Entrada>();
