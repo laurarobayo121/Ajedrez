@@ -40,17 +40,34 @@ public class GestorTurnos : MonoBehaviour
         }
     }
 
-    public void IniciarPartida()
+    private void ReiniciarTemporizador()
     {
+        tiempoRestante = tiempoPorTurno;
+        if (textoTemporizador != null)
+            textoTemporizador.text = Mathf.Ceil(tiempoRestante).ToString();
+    }
+
+
+    public void IniciarPartida()
+    { 
+        Debug.Log("🔵 Inicia partida — Turno del HUMANO");
         turnoActual = Turno.Humano;
         IniciarTemporizadorHumano();
+        
     }
 
     private void IniciarTemporizadorHumano()
-    {
+    { 
+        Debug.Log("🟢 Turno del humano iniciado. Temporizador activado.");
         tiempoRestante = tiempoPorTurno;
         temporizadorActivo = true;
         motorEntrada.HabilitarEntrada(true);
+    }
+
+    private void IniciarTemporizadorIA()
+    {
+        Debug.Log("🤖 Temporizador de la IA reiniciado (aunque no cuente regresivamente).");
+        ReiniciarTemporizador(); // Deja el tiempo en 10 siempre
     }
 
     // Se llama cuando el jugador humano suelta una ficha
@@ -58,15 +75,23 @@ public class GestorTurnos : MonoBehaviour
     {
         if (turnoActual != Turno.Humano) return;
 
+        Debug.Log("🟡 Movimiento del humano completado. Cambiando a la IA...");
+
         temporizadorActivo = false;
         motorEntrada.HabilitarEntrada(false);
         CambiarATurnoIA();
     }
 
     private void CambiarATurnoIA()
-    {
+    { 
+        Debug.Log("🔴 Turno de la IA iniciado.");
         turnoActual = Turno.IA;
+        temporizadorActivo = true;
         motorEntrada.HabilitarEntrada(false);
+
+        ReiniciarTemporizador();
+        IniciarTemporizadorIA();
+
 
         // Ejecuta la jugada de la IA
         motorIA.RealizarJugada();
@@ -78,8 +103,11 @@ public class GestorTurnos : MonoBehaviour
     private IEnumerator EsperarFinIA()
     {
         // Puedes ajustar el tiempo según la duración de la jugada de la IA
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(5.5f);
+        temporizadorActivo = false;
+        Debug.Log("🟣 La IA terminó su jugada. Regresando al turno humano.");
         turnoActual = Turno.Humano;
         IniciarTemporizadorHumano();
     }
+
 }

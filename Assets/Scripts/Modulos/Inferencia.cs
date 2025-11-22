@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Inferencia : MonoBehaviour
 {
-    public MatrizTablero tablero; // referencia opcional si ya tienes clase Tablero
+    public MatrizTablero tablero; 
 
     // Este método lo llama el GestorTurnos
     public void RealizarJugada()
