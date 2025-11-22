@@ -139,3 +139,5 @@ MonoBehaviour:
   tipoPieza: 5
   colorPieza: 0
   posicionActual: {x: 0, y: 0}
+  esRey: 1
+  esIA: 0

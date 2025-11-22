@@ -16,49 +16,54 @@ public class Entrada : MonoBehaviour
     // Llamado desde FichaInteractiva cuando el jugador empieza a mover
     public void RegistrarSeleccion(GameObject ficha)
     {
+        if (!entradaHabilitada)
+            return;  // 🔒 BLOQUEA LA ENTRADA CUANDO ES TURNO DE LA IA
+
         fichaSeleccionada = ficha;
         casillaInicial = ObtenerCoordenadasDesdePosicion(ficha.transform.position);
         movimientoEnProgreso = true;
     }
 
+
     // Llamado desde FichaInteractiva cuando el jugador suelta la ficha
     public void RegistrarMovimiento(Vector3 posicionFinal)
     {
+        if (!entradaHabilitada)
+            return;  // 🔒 BLOQUEA LA ENTRADA CUANDO ES TURNO DE LA IA
+
         if (!movimientoEnProgreso || fichaSeleccionada == null)
             return;
 
         casillaDestino = ObtenerCoordenadasDesdePosicion(posicionFinal);
 
-        // Validar que el movimiento esté dentro del tablero
         if (!EsMovimientoDentroDelTablero(casillaDestino))
         {
-            Debug.Log("Movimiento fuera del tablero. Se cancela.");
             ResetFicha();
             return;
         }
 
-        // Crear una jugada estructurada
         Movimiento movimiento = new Movimiento(casillaInicial, casillaDestino, fichaSeleccionada);
 
-        // Enviar a la base de conocimiento
         bool esLegal = baseConocimiento.VerificarMovimientoLegal(movimiento);
 
         if (esLegal)
         {
-            string nombreCasilla = LenguajeAjedrez.ANotacion(casillaDestino.x, casillaDestino.y, tablero.filas);
-            Debug.Log("Movimiento legal: " + nombreCasilla);
-
-            // Aquí se podría actualizar el turno o pasar al motor de inferencia
+            Debug.Log("Movimiento legal");
+            // Solo notificar si es turno del jugador
+            if (gestorTurnos.turnoActual == GestorTurnos.Turno.Humano)
+            {
+                gestorTurnos.JugadaHumanoCompletada();
+            }
         }
         else
         {
-            Debug.Log("Movimiento ilegal. Revirtiendo.");
             ResetFicha();
         }
 
         movimientoEnProgreso = false;
         fichaSeleccionada = null;
     }
+
 
     private Vector2Int ObtenerCoordenadasDesdePosicion(Vector3 posicion)
     {
