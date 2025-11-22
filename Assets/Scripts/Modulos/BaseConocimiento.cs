@@ -14,7 +14,7 @@ public class BaseConocimiento : MonoBehaviour
 
     public bool VerificarMovimientoLegal(Movimiento movimiento)
     {
-        // Obtener el script PiezaAjedrez de la ficha movida
+        // Obtener el script PiezaAjedrez
         PiezaAjedrez pieza = movimiento.ficha.GetComponent<PiezaAjedrez>();
         if (pieza == null)
         {
@@ -22,17 +22,31 @@ public class BaseConocimiento : MonoBehaviour
             return false;
         }
 
-        // Verificar si el movimiento está en la lista de movimientos legales de la pieza
         bool movimientoLegal = pieza.EsMovimientoLegal(movimiento.destino);
 
         if (movimientoLegal)
         {
             Debug.Log($"Movimiento LEGAL de {pieza.tipoPieza} {pieza.colorPieza} desde {movimiento.inicio} hasta {movimiento.destino}");
-            
-            // Actualizar la posición de la pieza
+
+            // 1️⃣ ¿Hay una pieza en el destino?
+            GameObject piezaDestinoGO = ObtenerPiezaEnPosicion(movimiento.destino);
+
+            if (piezaDestinoGO != null)
+            {
+                PiezaAjedrez piezaDestino = piezaDestinoGO.GetComponent<PiezaAjedrez>();
+
+                // 2️⃣ SOLO destruir si es del otro color
+                if (piezaDestino != null && piezaDestino.colorPieza != pieza.colorPieza)
+                {
+                    Debug.Log($"CAPTURA: {pieza.tipoPieza} ({pieza.colorPieza}) come a {piezaDestino.tipoPieza} ({piezaDestino.colorPieza})");
+                    Destroy(piezaDestinoGO);
+                }
+            }
+
+            // 3️⃣ actualizar posición lógica
             pieza.ActualizarPosicion(movimiento.destino);
-            
-            // Actualizar el registro de piezas
+
+            // 4️⃣ actualizar el registro interno
             ActualizarRegistroPiezas();
         }
         else
@@ -46,15 +60,11 @@ public class BaseConocimiento : MonoBehaviour
     private void ActualizarRegistroPiezas()
     {
         piezasPorPosicion.Clear();
-        
-        // Buscar todas las piezas en el tablero
+
         PiezaAjedrez[] todasLasPiezas = FindObjectsOfType<PiezaAjedrez>();
         foreach (PiezaAjedrez pieza in todasLasPiezas)
         {
-            if (!piezasPorPosicion.ContainsKey(pieza.posicionActual))
-            {
-                piezasPorPosicion.Add(pieza.posicionActual, pieza.gameObject);
-            }
+            piezasPorPosicion[pieza.posicionActual] = pieza.gameObject;
         }
     }
 
@@ -69,7 +79,6 @@ public class BaseConocimiento : MonoBehaviour
         return piezasPorPosicion.ContainsKey(posicion);
     }
 
-    // ESTA ES LA LÍNEA CORREGIDA - usa PiezaAjedrez.ColorPieza
     public PiezaAjedrez.ColorPieza ObtenerColorPiezaEnPosicion(Vector2Int posicion)
     {
         if (piezasPorPosicion.TryGetValue(posicion, out GameObject pieza))
@@ -77,6 +86,6 @@ public class BaseConocimiento : MonoBehaviour
             PiezaAjedrez scriptPieza = pieza.GetComponent<PiezaAjedrez>();
             return scriptPieza.colorPieza;
         }
-        return PiezaAjedrez.ColorPieza.Blanco; // Valor por defecto
+        return PiezaAjedrez.ColorPieza.Blanco;
     }
 }
