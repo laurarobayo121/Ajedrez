@@ -140,7 +140,5 @@ public class Inferencia : MonoBehaviour
         // 4. Refrescar BaseConocimiento (para que conozca las nuevas posiciones)
         // ----------------------------------------------------------------------
         baseConocimiento.Refrescar();
-
-        
     }
 }

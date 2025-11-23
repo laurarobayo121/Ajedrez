@@ -111,7 +111,7 @@ public class GestorTurnos : MonoBehaviour
     private IEnumerator EsperarFinIA()
     {
         // Puedes ajustar el tiempo según la duración de la jugada de la IA
-        yield return new WaitForSeconds(5.5f);
+        yield return new WaitForSeconds(1.5f);
         temporizadorActivo = false;
         Debug.Log("🟣 La IA terminó su jugada. Regresando al turno humano.");
         turnoActual = Turno.Humano;

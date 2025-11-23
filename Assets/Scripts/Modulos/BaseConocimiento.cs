@@ -109,4 +109,5 @@ public class BaseConocimiento : MonoBehaviour
         // Valor por defecto (por si no hay pieza)
         return PiezaAjedrez.ColorPieza.Blanco;
     }
+    
 }
