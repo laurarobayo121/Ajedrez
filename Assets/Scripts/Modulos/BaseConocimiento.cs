@@ -5,30 +5,14 @@ using System.Collections.Generic;
 public class BaseConocimiento : MonoBehaviour
 {
     [Header("Escenas de resultado")]
-    // Blancas ganan -> Victoria, Negras ganan -> GameOver
     [SerializeField] private string escenaVictoriaBlancas = "Victoria";
-    [SerializeField] private string escenaVictoriaNegras = "GameOver";
+    [SerializeField] private string escenaVictoriaNegras  = "GameOver";
 
     private MatrizTablero tablero;
 
-    // Mapa de posiciones lógicas -> GameObject de la pieza (estado actual)
+    // Mapa de posiciones lógicas -> GameObject de la pieza
     private Dictionary<Vector2Int, GameObject> piezasPorPosicion =
         new Dictionary<Vector2Int, GameObject>();
-
-    // -------------------------------------------
-    // ESTRUCTURA INTERNA PARA SIMULACIÓN
-    // -------------------------------------------
-    private struct PiezaSim
-    {
-        public PiezaAjedrez.TipoPieza tipo;
-        public PiezaAjedrez.ColorPieza color;
-
-        public PiezaSim(PiezaAjedrez.TipoPieza t, PiezaAjedrez.ColorPieza c)
-        {
-            tipo = t;
-            color = c;
-        }
-    }
 
     void Start()
     {
@@ -36,18 +20,9 @@ public class BaseConocimiento : MonoBehaviour
         ActualizarRegistroPiezas();
     }
 
-    // ===========================================
-    // MÉTODO PRINCIPAL: VERIFICAR MOVIMIENTO
-    // ===========================================
-    /// <summary>
-    /// Verifica si un movimiento es legal según TODAS las reglas:
-    ///  - movimiento del tipo de pieza (geometría)
-    ///  - bloqueo por otras piezas
-    ///  - no se come piezas propias
-    ///  - no deja a tu propio rey en jaque
-    /// Si es legal, actualiza posiciones, destruye la pieza comida (si hay)
-    /// y evalúa jaque mate/captura de rey para cambiar de escena.
-    /// </summary>
+    // ==========================================================
+    //          MÉTODO PRINCIPAL: VERIFICAR MOVIMIENTO
+    // ==========================================================
     public bool VerificarMovimientoLegal(Movimiento movimiento)
     {
         if (movimiento == null || movimiento.ficha == null)
@@ -63,27 +38,27 @@ public class BaseConocimiento : MonoBehaviour
             return false;
         }
 
-        Vector2Int origen = pieza.posicionActual;
+        Vector2Int origen  = pieza.posicionActual;
         Vector2Int destino = movimiento.destino;
 
-        // Asegurar que el diccionario está actualizado
+        // Asegurarse que el mapa está al día
         ActualizarRegistroPiezas();
 
-        // 1) No quedarse en la misma casilla
-        if (origen == destino)
-        {
-            Debug.LogWarning("[BaseConocimiento] Movimiento a la misma casilla.");
-            return false;
-        }
-
-        // 2) Validar que el destino está dentro del tablero
+        // 1) No moverse fuera del tablero
         if (!DentroTablero(destino))
         {
             Debug.LogWarning("[BaseConocimiento] Movimiento fuera del tablero.");
             return false;
         }
 
-        // 3) No capturar pieza propia
+        // 2) No quedarse en la misma casilla
+        if (origen == destino)
+        {
+            Debug.LogWarning("[BaseConocimiento] Movimiento a la misma casilla.");
+            return false;
+        }
+
+        // 3) Si hay pieza en destino del mismo color -> no se puede
         if (HayPiezaEnPosicion(destino))
         {
             var colorDestino = ObtenerColorPiezaEnPosicion(destino);
@@ -94,14 +69,14 @@ public class BaseConocimiento : MonoBehaviour
             }
         }
 
-        // 4) Reglas específicas de movimiento por tipo de pieza
+        // 4) Validar movimiento según tipo de pieza (geometría básica)
         if (!EsMovimientoValidoPorTipo(pieza, origen, destino))
         {
-            Debug.LogWarning("[BaseConocimiento] Movimiento no válido para esta pieza.");
+            Debug.LogWarning("[BaseConocimiento] Movimiento no válido para " + pieza.tipoPieza);
             return false;
         }
 
-        // 5) Para piezas deslizantes, comprobar que NO hay piezas en medio
+        // 5) Para piezas deslizantes (torre, alfil, reina): comprobar que no haya nada en medio
         if (EsPiezaDeslizante(pieza.tipoPieza))
         {
             if (HayPiezasEntre(origen, destino))
@@ -111,68 +86,47 @@ public class BaseConocimiento : MonoBehaviour
             }
         }
 
-        // 6) Comprobar que NO dejas a tu propio rey en jaque (simulación)
-        if (MovimientoDejaEnJaquePropioRey(pieza, origen, destino))
-        {
-            Debug.LogWarning("[BaseConocimiento] No puedes dejar a tu rey en jaque.");
-            return false;
-        }
+        // ----------------------------------------------------------------
+        //      Si llegamos hasta aquí: el movimiento es LEGAL
+        // ----------------------------------------------------------------
+        Debug.Log($"[BaseConocimiento] ✅ Movimiento LEGAL de {pieza.tipoPieza} {pieza.colorPieza} de {origen} a {destino}");
 
-        // --------------------------------------------------------------------
-        // Hasta aquí el movimiento es LEGAL según las reglas del ajedrez
-        // --------------------------------------------------------------------
-
-        Debug.Log($"[BaseConocimiento] Movimiento LEGAL de {pieza.tipoPieza} {pieza.colorPieza} de {origen} a {destino}");
-
-        // 7) Si hay pieza enemiga en el destino, la "comemos"
+        // 6) Si hay pieza enemiga en destino → capturar
         GameObject piezaEnDestino = ObtenerPiezaEnPosicion(destino);
-        bool capturaRey = false;
-
         if (piezaEnDestino != null)
         {
-            PiezaAjedrez piezaCapturada = piezaEnDestino.GetComponent<PiezaAjedrez>();
-            if (piezaCapturada != null &&
-                piezaCapturada.tipoPieza == PiezaAjedrez.TipoPieza.Rey)
+            PiezaAjedrez capturada = piezaEnDestino.GetComponent<PiezaAjedrez>();
+            if (capturada != null)
             {
-                capturaRey = true;
-            }
+                Debug.Log($"[BaseConocimiento] ⚔ Captura: {capturada.tipoPieza} {capturada.colorPieza} en {destino}");
 
-            Destroy(piezaEnDestino);
+                bool reyCapturado = (capturada.tipoPieza == PiezaAjedrez.TipoPieza.Rey);
+                PiezaAjedrez.ColorPieza colorRey = capturada.colorPieza;
+
+                Destroy(piezaEnDestino);
+
+                if (reyCapturado)
+                {
+                    Debug.Log("[BaseConocimiento] 👑 ¡Rey capturado! Fin de partida.");
+                    CargarEscenaVictoria(colorRey == PiezaAjedrez.ColorPieza.Blanco
+                        ? PiezaAjedrez.ColorPieza.Negro
+                        : PiezaAjedrez.ColorPieza.Blanco);
+                }
+            }
         }
 
-        // 8) Actualizar posición lógica de la pieza movida
+        // 7) Actualizar posición lógica de la pieza movida
         pieza.ActualizarPosicion(destino);
 
-        // 9) Actualizar registro interno
+        // 8) Actualizar registro interno
         ActualizarRegistroPiezas();
-
-        // 10) Evaluar condición de victoria:
-        PiezaAjedrez.ColorPieza colorQueJuega = pieza.colorPieza;
-        PiezaAjedrez.ColorPieza colorOponente =
-            (colorQueJuega == PiezaAjedrez.ColorPieza.Blanco)
-                ? PiezaAjedrez.ColorPieza.Negro
-                : PiezaAjedrez.ColorPieza.Blanco;
-
-        if (capturaRey)
-        {
-            Debug.Log("[BaseConocimiento] ¡Rey capturado! Fin de la partida.");
-            CargarEscenaVictoria(colorQueJuega);
-        }
-        else
-        {
-            if (EstaEnJaqueMate(colorOponente))
-            {
-                Debug.Log("[BaseConocimiento] ¡Jaque mate! Ganan " + colorQueJuega);
-                CargarEscenaVictoria(colorQueJuega);
-            }
-        }
 
         return true;
     }
 
-    // ===========================================
-    // REGLAS POR TIPO DE PIEZA
-    // ===========================================
+    // ==========================================================
+    //             REGLAS POR TIPO DE PIEZA
+    // ==========================================================
     private bool EsMovimientoValidoPorTipo(PiezaAjedrez pieza, Vector2Int origen, Vector2Int destino)
     {
         int dx = destino.x - origen.x;
@@ -181,29 +135,31 @@ public class BaseConocimiento : MonoBehaviour
         int absDx = Mathf.Abs(dx);
         int absDy = Mathf.Abs(dy);
 
+        Debug.Log($"[MOVIMIENTO] {pieza.tipoPieza} {pieza.colorPieza} de {origen} a {destino} dx={dx}, dy={dy}, |dx|={absDx}, |dy|={absDy}");
+
         switch (pieza.tipoPieza)
         {
             case PiezaAjedrez.TipoPieza.Peon:
                 return EsMovimientoValidoPeon(pieza.colorPieza, origen, destino);
 
             case PiezaAjedrez.TipoPieza.Torre:
-                // Movimiento horizontal o vertical
+                // horizontal o vertical
                 return (dx == 0 || dy == 0);
 
             case PiezaAjedrez.TipoPieza.Alfil:
-                // Movimiento diagonal
+                // diagonal
                 return absDx == absDy;
 
             case PiezaAjedrez.TipoPieza.Reina:
-                // Combinación de torre y alfil
+                // combinación torre + alfil
                 return (dx == 0 || dy == 0 || absDx == absDy);
 
             case PiezaAjedrez.TipoPieza.Caballo:
-                // L: 2x1 o 1x2
+                // movimiento en L
                 return (absDx == 2 && absDy == 1) || (absDx == 1 && absDy == 2);
 
             case PiezaAjedrez.TipoPieza.Rey:
-                // Un paso en cualquier dirección (sin enroque por simplicidad)
+                // 1 casilla en cualquier dirección (sin enroque por simplicidad)
                 return absDx <= 1 && absDy <= 1;
 
             default:
@@ -211,37 +167,71 @@ public class BaseConocimiento : MonoBehaviour
         }
     }
 
+    // 🔹 Peones con reglas estrictas + logs
     private bool EsMovimientoValidoPeon(PiezaAjedrez.ColorPieza color, Vector2Int origen, Vector2Int destino)
     {
-        int direccion = (color == PiezaAjedrez.ColorPieza.Blanco) ? 1 : -1;
-        int dx = destino.x - origen.x;
-        int dy = destino.y - origen.y;
+        int dir = (color == PiezaAjedrez.ColorPieza.Blanco) ? 1 : -1;
+
+        int dx = destino.x - origen.x;   // filas (vertical)
+        int dy = destino.y - origen.y;   // columnas (horizontal)
 
         bool hayPiezaDestino = HayPiezaEnPosicion(destino);
         PiezaAjedrez.ColorPieza colorDestino = PiezaAjedrez.ColorPieza.Blanco;
         if (hayPiezaDestino)
             colorDestino = ObtenerColorPiezaEnPosicion(destino);
 
-        // Movimiento hacia adelante (1 casilla)
-        if (dy == 0 && dx == direccion && !hayPiezaDestino)
-            return true;
+        Debug.Log($"[PEÓN {color}] origen={origen} destino={destino} dx={dx} dy={dy} hayPiezaDestino={hayPiezaDestino} colorDestino={colorDestino}");
 
-        // Doble paso inicial
-        if (dy == 0 && dx == 2 * direccion && !hayPiezaDestino)
+        // Movimiento recto hacia adelante (1 casilla, sin capturar)
+        if (dy == 0 && dx == dir)
         {
-            int filaInicial = (color == PiezaAjedrez.ColorPieza.Blanco) ? 1 : 6;
-            if (origen.x == filaInicial)
+            if (!hayPiezaDestino)
             {
-                Vector2Int intermedia = new Vector2Int(origen.x + direccion, origen.y);
-                if (!HayPiezaEnPosicion(intermedia))
-                    return true;
+                Debug.Log("[PEÓN] Avance simple válido");
+                return true;
+            }
+            else
+            {
+                Debug.Log("[PEÓN] Bloqueado: hay pieza justo delante");
+                return false;
             }
         }
 
-        // Captura en diagonal
-        if (Mathf.Abs(dy) == 1 && dx == direccion && hayPiezaDestino && colorDestino != color)
-            return true;
+        // Doble paso inicial (2 casillas hacia adelante)
+        int filaInicial = (color == PiezaAjedrez.ColorPieza.Blanco) ? 1 : 6;
 
+        if (dy == 0 && dx == 2 * dir && origen.x == filaInicial)
+        {
+            Vector2Int intermedia = new Vector2Int(origen.x + dir, origen.y);
+
+            if (!HayPiezaEnPosicion(intermedia) && !hayPiezaDestino)
+            {
+                Debug.Log("[PEÓN] Doble paso inicial válido");
+                return true;
+            }
+            else
+            {
+                Debug.Log("[PEÓN] Doble paso bloqueado (pieza en medio o en destino)");
+                return false;
+            }
+        }
+
+        // Captura en diagonal (1 casilla en diagonal hacia delante, con pieza enemiga)
+        if (Mathf.Abs(dy) == 1 && dx == dir)
+        {
+            if (hayPiezaDestino && colorDestino != color)
+            {
+                Debug.Log("[PEÓN] Captura diagonal válida");
+                return true;
+            }
+            else
+            {
+                Debug.Log("[PEÓN] Intento de captura diagonal inválido (no hay enemigo o es del mismo color)");
+                return false;
+            }
+        }
+
+        Debug.Log("[PEÓN] Movimiento inválido (no encaja en ninguna regla)");
         return false;
     }
 
@@ -275,347 +265,13 @@ public class BaseConocimiento : MonoBehaviour
 
     private bool DentroTablero(Vector2Int pos)
     {
-        return pos.x >= 0 && pos.x < 8 && pos.y >= 0 && pos.y < 8;
+        return pos.x >= 0 && pos.x < 8 &&
+               pos.y >= 0 && pos.y < 8;
     }
 
-    // ===========================================
-    // SIMULACIÓN PARA JAQUE Y JAQUE MATE
-    // ===========================================
-    private Dictionary<Vector2Int, PiezaSim> ConstruirMapaSimulado()
-    {
-        Dictionary<Vector2Int, PiezaSim> mapa = new Dictionary<Vector2Int, PiezaSim>();
-
-        PiezaAjedrez[] piezas = Object.FindObjectsByType<PiezaAjedrez>(FindObjectsSortMode.None);
-        foreach (var p in piezas)
-        {
-            mapa[p.posicionActual] = new PiezaSim(p.tipoPieza, p.colorPieza);
-        }
-
-        return mapa;
-    }
-
-    private bool MovimientoDejaEnJaquePropioRey(PiezaAjedrez pieza, Vector2Int origen, Vector2Int destino)
-    {
-        var mapa = ConstruirMapaSimulado();
-
-        // Aplicar movimiento simulado
-        if (mapa.ContainsKey(origen))
-            mapa.Remove(origen);
-
-        if (mapa.ContainsKey(destino))
-            mapa.Remove(destino);
-
-        mapa[destino] = new PiezaSim(pieza.tipoPieza, pieza.colorPieza);
-
-        return EstaEnJaque(pieza.colorPieza, mapa);
-    }
-
-    private bool EstaEnJaque(PiezaAjedrez.ColorPieza color, Dictionary<Vector2Int, PiezaSim> mapa)
-    {
-        // 1) Encontrar al rey
-        bool reyEncontrado = false;
-        Vector2Int posRey = Vector2Int.zero;
-
-        foreach (var kv in mapa)
-        {
-            if (kv.Value.color == color &&
-                kv.Value.tipo == PiezaAjedrez.TipoPieza.Rey)
-            {
-                reyEncontrado = true;
-                posRey = kv.Key;
-                break;
-            }
-        }
-
-        if (!reyEncontrado)
-            return true; // sin rey = perdido
-
-        // 2) Ver si alguna pieza enemiga puede capturar esa casilla
-        foreach (var kv in mapa)
-        {
-            PiezaSim pieza = kv.Value;
-
-            if (pieza.color == color)
-                continue;
-
-            Vector2Int origen = kv.Key;
-            List<Vector2Int> ataques = GenerarMovimientosSimulados(origen, pieza, mapa, soloAtaquesPeon: true);
-
-            foreach (var d in ataques)
-            {
-                if (d == posRey)
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-    private bool EstaEnJaqueMate(PiezaAjedrez.ColorPieza color)
-    {
-        var mapa = ConstruirMapaSimulado();
-
-        // Si no está en jaque, no puede ser jaque mate
-        if (!EstaEnJaque(color, mapa))
-            return false;
-
-        // Probar todos los movimientos posibles de ese color
-        foreach (var kv in mapa)
-        {
-            PiezaSim pieza = kv.Value;
-            if (pieza.color != color)
-                continue;
-
-            Vector2Int origen = kv.Key;
-            List<Vector2Int> movs = GenerarMovimientosSimulados(origen, pieza, mapa, soloAtaquesPeon: false);
-
-            foreach (var destino in movs)
-            {
-                var mapaCopia = new Dictionary<Vector2Int, PiezaSim>(mapa);
-
-                if (mapaCopia.ContainsKey(origen))
-                    mapaCopia.Remove(origen);
-
-                if (mapaCopia.ContainsKey(destino))
-                    mapaCopia.Remove(destino);
-
-                mapaCopia[destino] = pieza;
-
-                if (!EstaEnJaque(color, mapaCopia))
-                {
-                    return false; // hay al menos una jugada que salva
-                }
-            }
-        }
-
-        // No hay jugada que salve al rey
-        return true;
-    }
-
-    private List<Vector2Int> GenerarMovimientosSimulados(
-        Vector2Int origen,
-        PiezaSim pieza,
-        Dictionary<Vector2Int, PiezaSim> mapa,
-        bool soloAtaquesPeon)
-    {
-        List<Vector2Int> resultado = new List<Vector2Int>();
-
-        int x = origen.x;
-        int y = origen.y;
-
-        switch (pieza.tipo)
-        {
-            case PiezaAjedrez.TipoPieza.Peon:
-                {
-                    int dir = (pieza.color == PiezaAjedrez.ColorPieza.Blanco) ? 1 : -1;
-
-                    // Ataques diagonales (para jaque)
-                    Vector2Int diagIzq = new Vector2Int(x + dir, y - 1);
-                    Vector2Int diagDer = new Vector2Int(x + dir, y + 1);
-
-                    if (DentroTablero(diagIzq))
-                    {
-                        if (soloAtaquesPeon)
-                        {
-                            resultado.Add(diagIzq);
-                        }
-                        else
-                        {
-                            if (!mapa.ContainsKey(diagIzq) || mapa[diagIzq].color != pieza.color)
-                                resultado.Add(diagIzq);
-                        }
-                    }
-
-                    if (DentroTablero(diagDer))
-                    {
-                        if (soloAtaquesPeon)
-                        {
-                            resultado.Add(diagDer);
-                        }
-                        else
-                        {
-                            if (!mapa.ContainsKey(diagDer) || mapa[diagDer].color != pieza.color)
-                                resultado.Add(diagDer);
-                        }
-                    }
-
-                    if (!soloAtaquesPeon)
-                    {
-                        // Movimiento hacia adelante
-                        Vector2Int adelante = new Vector2Int(x + dir, y);
-                        if (DentroTablero(adelante) && !mapa.ContainsKey(adelante))
-                        {
-                            resultado.Add(adelante);
-                        }
-
-                        // Doble paso inicial
-                        int filaInicial = (pieza.color == PiezaAjedrez.ColorPieza.Blanco) ? 1 : 6;
-                        if (x == filaInicial)
-                        {
-                            Vector2Int intermedia = new Vector2Int(x + dir, y);
-                            Vector2Int doble = new Vector2Int(x + 2 * dir, y);
-                            if (DentroTablero(doble) &&
-                                !mapa.ContainsKey(intermedia) &&
-                                !mapa.ContainsKey(doble))
-                            {
-                                resultado.Add(doble);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case PiezaAjedrez.TipoPieza.Caballo:
-                {
-                    Vector2Int[] offsets = new Vector2Int[]
-                    {
-                        new Vector2Int( 2,  1),
-                        new Vector2Int( 2, -1),
-                        new Vector2Int(-2,  1),
-                        new Vector2Int(-2, -1),
-                        new Vector2Int( 1,  2),
-                        new Vector2Int( 1, -2),
-                        new Vector2Int(-1,  2),
-                        new Vector2Int(-1, -2),
-                    };
-
-                    foreach (var off in offsets)
-                    {
-                        Vector2Int d = origen + off;
-                        if (!DentroTablero(d))
-                            continue;
-
-                        if (!mapa.ContainsKey(d) || mapa[d].color != pieza.color)
-                        {
-                            resultado.Add(d);
-                        }
-                    }
-                }
-                break;
-
-            case PiezaAjedrez.TipoPieza.Rey:
-                {
-                    for (int dx = -1; dx <= 1; dx++)
-                    {
-                        for (int dy = -1; dy <= 1; dy++)
-                        {
-                            if (dx == 0 && dy == 0) continue;
-                            Vector2Int d = new Vector2Int(x + dx, y + dy);
-                            if (!DentroTablero(d)) continue;
-
-                            if (!mapa.ContainsKey(d) || mapa[d].color != pieza.color)
-                            {
-                                resultado.Add(d);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case PiezaAjedrez.TipoPieza.Torre:
-                {
-                    Vector2Int[] dirs = new Vector2Int[]
-                    {
-                        new Vector2Int( 1,  0),
-                        new Vector2Int(-1,  0),
-                        new Vector2Int( 0,  1),
-                        new Vector2Int( 0, -1),
-                    };
-
-                    foreach (var dir in dirs)
-                    {
-                        Vector2Int d = origen + dir;
-                        while (DentroTablero(d))
-                        {
-                            if (!mapa.ContainsKey(d))
-                            {
-                                resultado.Add(d);
-                            }
-                            else
-                            {
-                                if (mapa[d].color != pieza.color)
-                                    resultado.Add(d);
-                                break;
-                            }
-                            d += dir;
-                        }
-                    }
-                }
-                break;
-
-            case PiezaAjedrez.TipoPieza.Alfil:
-                {
-                    Vector2Int[] dirs = new Vector2Int[]
-                    {
-                        new Vector2Int( 1,  1),
-                        new Vector2Int( 1, -1),
-                        new Vector2Int(-1,  1),
-                        new Vector2Int(-1, -1),
-                    };
-
-                    foreach (var dir in dirs)
-                    {
-                        Vector2Int d = origen + dir;
-                        while (DentroTablero(d))
-                        {
-                            if (!mapa.ContainsKey(d))
-                            {
-                                resultado.Add(d);
-                            }
-                            else
-                            {
-                                if (mapa[d].color != pieza.color)
-                                    resultado.Add(d);
-                                break;
-                            }
-                            d += dir;
-                        }
-                    }
-                }
-                break;
-
-            case PiezaAjedrez.TipoPieza.Reina:
-                {
-                    Vector2Int[] dirs = new Vector2Int[]
-                    {
-                        new Vector2Int( 1,  0),
-                        new Vector2Int(-1,  0),
-                        new Vector2Int( 0,  1),
-                        new Vector2Int( 0, -1),
-                        new Vector2Int( 1,  1),
-                        new Vector2Int( 1, -1),
-                        new Vector2Int(-1,  1),
-                        new Vector2Int(-1, -1),
-                    };
-
-                    foreach (var dir in dirs)
-                    {
-                        Vector2Int d = origen + dir;
-                        while (DentroTablero(d))
-                        {
-                            if (!mapa.ContainsKey(d))
-                            {
-                                resultado.Add(d);
-                            }
-                            else
-                            {
-                                if (mapa[d].color != pieza.color)
-                                    resultado.Add(d);
-                                break;
-                            }
-                            d += dir;
-                        }
-                    }
-                }
-                break;
-        }
-
-        return resultado;
-    }
-
-    // ===========================================
-    // REGISTRO DE PIEZAS Y UTILIDADES PÚBLICAS
-    // ===========================================
+    // ==========================================================
+    //          REGISTRO DE PIEZAS Y UTILIDADES
+    // ==========================================================
     private void ActualizarRegistroPiezas()
     {
         piezasPorPosicion.Clear();
@@ -660,9 +316,9 @@ public class BaseConocimiento : MonoBehaviour
         return PiezaAjedrez.ColorPieza.Blanco;
     }
 
-    // ===========================================
-    // CAMBIO DE ESCENAS
-    // ===========================================
+    // ==========================================================
+    //                   CAMBIO DE ESCENAS
+    // ==========================================================
     private void CargarEscenaVictoria(PiezaAjedrez.ColorPieza ganador)
     {
         string escena = (ganador == PiezaAjedrez.ColorPieza.Blanco)
