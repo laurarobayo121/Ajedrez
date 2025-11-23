@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public class BaseConocimiento : MonoBehaviour
 {
     private MatrizTablero tablero;
+
+    // Mapa de posiciones lógicas -> GameObject de la pieza
     private Dictionary<Vector2Int, GameObject> piezasPorPosicion = new Dictionary<Vector2Int, GameObject>();
 
     void Start()
@@ -12,59 +14,52 @@ public class BaseConocimiento : MonoBehaviour
         ActualizarRegistroPiezas();
     }
 
+    /// <summary>
+    /// Verifica si un movimiento es legal según la pieza que se mueve.
+    /// Si es legal, actualiza la posición de la pieza y el registro interno.
+    /// </summary>
     public bool VerificarMovimientoLegal(Movimiento movimiento)
     {
+        // Obtener el script PiezaAjedrez de la ficha movida
         PiezaAjedrez pieza = movimiento.ficha.GetComponent<PiezaAjedrez>();
         if (pieza == null)
         {
-            Debug.LogError("La ficha movida no tiene componente PiezaAjedrez");
+            Debug.LogError("[BaseConocimiento] La ficha movida no tiene componente PiezaAjedrez");
             return false;
         }
 
-        // Verificar si el movimiento es legal
+        // Verificar si el movimiento está en la lista de movimientos legales de la pieza
         bool movimientoLegal = pieza.EsMovimientoLegal(movimiento.destino);
 
         if (movimientoLegal)
         {
-            Debug.Log($"Movimiento LEGAL de {pieza.tipoPieza} {pieza.colorPieza} desde {movimiento.inicio} hasta {movimiento.destino}");
+            Debug.Log($"[BaseConocimiento] Movimiento LEGAL de {pieza.tipoPieza} {pieza.colorPieza} desde {movimiento.inicio} hasta {movimiento.destino}");
 
-            // --- 🔥 DETECCIÓN DE CAPTURA ANTES DE MOVER ---
-            if (HayPiezaEnPosicion(movimiento.destino))
-            {
-                GameObject piezaCapturadaObj = ObtenerPiezaEnPosicion(movimiento.destino);
-                PiezaAjedrez piezaCapturada = piezaCapturadaObj.GetComponent<PiezaAjedrez>();
-
-                // Notificar captura al gestor de partida
-                GestorPartida gestor = FindObjectOfType<GestorPartida>();
-                if (gestor != null)
-                    gestor.NotificarCaptura(piezaCapturada);
-
-                // Destruir la pieza capturada
-                Destroy(piezaCapturadaObj);
-            }
-            // -----------------------------------------------------
-
-            // Mover la pieza
+            // Actualizar la posición lógica de la pieza
             pieza.ActualizarPosicion(movimiento.destino);
 
-            // Actualizar el registro del tablero
+            // Volver a escanear todas las piezas y rehacer el diccionario
             ActualizarRegistroPiezas();
         }
         else
         {
-            Debug.LogWarning($"Movimiento ILEGAL de {pieza.tipoPieza} {pieza.colorPieza} desde {movimiento.inicio} hasta {movimiento.destino}");
+            Debug.LogWarning($"[BaseConocimiento] Movimiento ILEGAL de {pieza.tipoPieza} {pieza.colorPieza} desde {movimiento.inicio} hasta {movimiento.destino}");
         }
 
         return movimientoLegal;
     }
 
-
+    /// <summary>
+    /// Recorre todas las piezas de la escena y actualiza el diccionario
+    /// posición -> GameObject de pieza.
+    /// </summary>
     private void ActualizarRegistroPiezas()
     {
         piezasPorPosicion.Clear();
-        
-        // Buscar todas las piezas en el tablero
-        PiezaAjedrez[] todasLasPiezas = FindObjectsOfType<PiezaAjedrez>();
+
+        // Buscar todas las piezas en el tablero (en la escena)
+        PiezaAjedrez[] todasLasPiezas = Object.FindObjectsByType<PiezaAjedrez>(FindObjectsSortMode.None);
+
         foreach (PiezaAjedrez pieza in todasLasPiezas)
         {
             if (!piezasPorPosicion.ContainsKey(pieza.posicionActual))
@@ -74,25 +69,44 @@ public class BaseConocimiento : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Método público para refrescar el diccionario desde fuera (lo usa la IA).
+    /// </summary>
+    public void Refrescar()
+    {
+        ActualizarRegistroPiezas();
+    }
+
+    /// <summary>
+    /// Devuelve la pieza (GameObject) que está en una posición lógica dada.
+    /// </summary>
     public GameObject ObtenerPiezaEnPosicion(Vector2Int posicion)
     {
         piezasPorPosicion.TryGetValue(posicion, out GameObject pieza);
         return pieza;
     }
 
+    /// <summary>
+    /// Indica si hay alguna pieza en esa posición lógica.
+    /// </summary>
     public bool HayPiezaEnPosicion(Vector2Int posicion)
     {
         return piezasPorPosicion.ContainsKey(posicion);
     }
 
-    // ESTA ES LA LÍNEA CORREGIDA - usa PiezaAjedrez.ColorPieza
+    /// <summary>
+    /// Devuelve el color de la pieza en esa posición (si existe).
+    /// </summary>
     public PiezaAjedrez.ColorPieza ObtenerColorPiezaEnPosicion(Vector2Int posicion)
     {
         if (piezasPorPosicion.TryGetValue(posicion, out GameObject pieza))
         {
             PiezaAjedrez scriptPieza = pieza.GetComponent<PiezaAjedrez>();
-            return scriptPieza.colorPieza;
+            if (scriptPieza != null)
+                return scriptPieza.colorPieza;
         }
-        return PiezaAjedrez.ColorPieza.Blanco; // Valor por defecto
+
+        // Valor por defecto (por si no hay pieza)
+        return PiezaAjedrez.ColorPieza.Blanco;
     }
 }

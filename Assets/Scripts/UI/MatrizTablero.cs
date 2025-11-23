@@ -5,10 +5,10 @@ public class MatrizTablero : MonoBehaviour
     [Header("CONFIGURACIÓN DEL TABLERO")]
     public int filas = 8;
     public int columnas = 8;
-    public GameObject prefabCasilla;   
-    public float tamañoCasilla = 1f;
-    public Transform contenedorCasillas;
-    public SpriteRenderer fondoTablero;
+    public GameObject prefabCasilla;     // Prefab de la casilla
+    public float tamañoCasilla = 1f;     // No lo usamos directamente porque calculamos según el sprite
+    public Transform contenedorCasillas; // Padre donde van todas las casillas
+    public SpriteRenderer fondoTablero;  // Sprite del tablero
 
     private GameObject[,] casillas;
 
@@ -20,14 +20,14 @@ public class MatrizTablero : MonoBehaviour
 
     void GenerarCasillas()
     {
-        // Tamaño visible total del fondo del tablero
+        // Tamaño visible del sprite del tablero
         float ancho = fondoTablero.sprite.bounds.size.x * fondoTablero.transform.localScale.x;
-        float alto = fondoTablero.sprite.bounds.size.y * fondoTablero.transform.localScale.y;
+        float alto  = fondoTablero.sprite.bounds.size.y * fondoTablero.transform.localScale.y;
 
         float anchoCasilla = ancho / columnas;
-        float altoCasilla = alto / filas;
+        float altoCasilla  = alto  / filas;
 
-        // Encuentra la esquina inferior izquierda del fondo
+        // Esquina inferior izquierda del tablero en mundo
         Vector3 esquinaInferiorIzquierda = fondoTablero.bounds.min;
 
         for (int fila = 0; fila < filas; fila++)
@@ -42,9 +42,8 @@ public class MatrizTablero : MonoBehaviour
                 );
 
                 GameObject casilla = Instantiate(prefabCasilla, posicion, Quaternion.identity, contenedorCasillas);
-                casilla.name = $"Casilla_{fila}_{col}";
-
-                // Ajuste de tamaño de cada casilla según el fondo real del tablero
+               
+                // Info básica
                 casilla.transform.localScale = new Vector3(anchoCasilla, altoCasilla, 1f);
 
                 CasillaInfo info = casilla.AddComponent<CasillaInfo>();
@@ -59,8 +58,27 @@ public class MatrizTablero : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Devuelve la posición en mundo del centro de una casilla.
+    /// (La usa Entrada, etc.)
+    /// </summary>
     public Vector3 ObtenerPosicionCasilla(int fila, int columna)
     {
         return casillas[fila, columna].transform.position;
+    }
+
+    /// <summary>
+    /// Devuelve el GameObject de la casilla [fila, columna].
+    /// (La usa Inferencia para colocar visualmente las piezas de la IA.)
+    /// </summary>
+    public GameObject GetCasilla(int fila, int columna)
+    {
+        if (fila < 0 || fila >= filas || columna < 0 || columna >= columnas)
+        {
+            Debug.LogError($"[MatrizTablero] Casilla fuera de rango: ({fila}, {columna})");
+            return null;
+        }
+
+        return casillas[fila, columna];
     }
 }

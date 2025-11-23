@@ -428,6 +428,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tablero: {fileID: 2103043485}
+  baseConocimiento: {fileID: 144674908}
+  priorizarCapturas: 1
 --- !u!4 &266916397
 Transform:
   m_ObjectHideFlags: 0
