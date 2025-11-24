@@ -10,7 +10,6 @@ public class PiezaAjedrez : MonoBehaviour
     public TipoPieza tipoPieza;
     public ColorPieza colorPieza;
     public Vector2Int posicionActual;
-
     private Entrada moduloEntrada;
     private BaseConocimiento baseConocimiento;
 

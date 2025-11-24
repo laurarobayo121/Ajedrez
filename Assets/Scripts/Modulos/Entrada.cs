@@ -5,7 +5,7 @@ public class Entrada : MonoBehaviour
     [Header("Referencias")]
     public MatrizTablero tablero;
     public BaseConocimiento baseConocimiento;
-    public Inferencia motorInferencia;   // IA (por si luego la necesitas)
+    public Inferencia motorInferencia;   // IA
     public GestorTurnos gestorTurnos;    // Control de turnos
 
     private Vector2Int casillaInicial;
@@ -45,10 +45,19 @@ public class Entrada : MonoBehaviour
             return;
         }
 
-        // Crear la jugada
-        Movimiento movimiento = new Movimiento(casillaInicial, casillaDestino, fichaSeleccionada);
+        PiezaAjedrez piezaScript = fichaSeleccionada.GetComponent<PiezaAjedrez>();
+        if (piezaScript == null)
+        {
+            Debug.LogError("❌ La ficha seleccionada no tiene el componente PiezaAjedrez.");
+            ResetFicha();
+            Finalizar();
+            return;
+        }
 
-        // Verificar en la Base de Conocimiento
+        // Crear el movimiento con PiezaAjedrez
+        Movimiento movimiento = new Movimiento(casillaInicial, casillaDestino, piezaScript);
+
+        // Verificar movimiento legal en BaseConocimiento
         bool esLegal = baseConocimiento.VerificarMovimientoLegal(movimiento);
 
         if (esLegal)
@@ -56,7 +65,7 @@ public class Entrada : MonoBehaviour
             string casilla = LenguajeAjedrez.ANotacion(casillaDestino.x, casillaDestino.y, tablero.filas);
             Debug.Log($"✔ Movimiento legal hacia {casilla}");
 
-            // Mover la pieza a la casilla destino
+            // Mover la ficha visualmente
             fichaSeleccionada.transform.position =
                 tablero.ObtenerPosicionCasilla(casillaDestino.x, casillaDestino.y);
 
@@ -88,7 +97,7 @@ public class Entrada : MonoBehaviour
                              tablero.fondoTablero.transform.localScale.x /
                              tablero.columnas;
 
-        float altoCasilla  = tablero.fondoTablero.sprite.bounds.size.y *
+        float altoCasilla = tablero.fondoTablero.sprite.bounds.size.y *
                              tablero.fondoTablero.transform.localScale.y /
                              tablero.filas;
 

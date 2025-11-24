@@ -5,9 +5,9 @@ public class Movimiento
 {
     public Vector2Int inicio;
     public Vector2Int destino;
-    public GameObject ficha;
+    public PiezaAjedrez ficha; // Cambiado de GameObject a PiezaAjedrez
 
-    public Movimiento(Vector2Int i, Vector2Int d, GameObject f)
+    public Movimiento(Vector2Int i, Vector2Int d, PiezaAjedrez f) // también PiezaAjedrez
     {
         inicio = i;
         destino = d;

@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Ajedrez\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{04833D42-CCB0-2D76-315F-464E64C5E64D}|Assembly-CSharp.csproj|D:\\Ajedrez\\assets\\scripts\\modulos\\baseconocimiento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{04833D42-CCB0-2D76-315F-464E64C5E64D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\modulos\\baseconocimiento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{04833D42-CCB0-2D76-315F-464E64C5E64D}|Assembly-CSharp.csproj|D:\\Ajedrez\\assets\\scripts\\modulos\\entrada.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{04833D42-CCB0-2D76-315F-464E64C5E64D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\modulos\\entrada.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{04833D42-CCB0-2D76-315F-464E64C5E64D}|Assembly-CSharp.csproj|d:\\ajedrez\\assets\\scripts\\modulos\\piezaajedrez.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{04833D42-CCB0-2D76-315F-464E64C5E64D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\modulos\\piezaajedrez.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{04833D42-CCB0-2D76-315F-464E64C5E64D}|Assembly-CSharp.csproj|d:\\ajedrez\\assets\\scripts\\modulos\\movimiento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{04833D42-CCB0-2D76-315F-464E64C5E64D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\modulos\\movimiento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Movimiento.cs",
+              "DocumentMoniker": "D:\\Ajedrez\\Assets\\Scripts\\Modulos\\Movimiento.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Modulos\\Movimiento.cs",
+              "ToolTip": "D:\\Ajedrez\\Assets\\Scripts\\Modulos\\Movimiento.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Modulos\\Movimiento.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-24T05:48:51.29Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PiezaAjedrez.cs",
+              "DocumentMoniker": "D:\\Ajedrez\\Assets\\Scripts\\Modulos\\PiezaAjedrez.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Modulos\\PiezaAjedrez.cs",
+              "ToolTip": "D:\\Ajedrez\\Assets\\Scripts\\Modulos\\PiezaAjedrez.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Modulos\\PiezaAjedrez.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-24T02:58:40.471Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Entrada.cs",
+              "DocumentMoniker": "D:\\Ajedrez\\Assets\\Scripts\\Modulos\\Entrada.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Modulos\\Entrada.cs",
+              "ToolTip": "D:\\Ajedrez\\Assets\\Scripts\\Modulos\\Entrada.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Modulos\\Entrada.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAAADkAAABXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-24T01:14:46.9Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BaseConocimiento.cs",
+              "DocumentMoniker": "D:\\Ajedrez\\Assets\\Scripts\\Modulos\\BaseConocimiento.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Modulos\\BaseConocimiento.cs",
+              "ToolTip": "D:\\Ajedrez\\Assets\\Scripts\\Modulos\\BaseConocimiento.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Modulos\\BaseConocimiento.cs",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAcwGYAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T05:01:42.653Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
